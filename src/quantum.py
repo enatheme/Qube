@@ -60,3 +60,52 @@ def generate_floor_v1(number_line):
                 line.append(int(k))
             arr.append(line)
     return arr
+
+def generate_floor_v2(number_line, initial_column, min_x = 2, max_x = 2):
+    """ version 2 of generation
+    h gate is applied only if the block under is a floor and if it doesn't create a 'big step'
+    with previous column
+    """
+    assert(number_line == len(initial_column))
+
+    arr = []
+    arr.append(initial_column)
+
+    initial_colum = reversed(initial_column)
+
+    for j in range(1, 20):
+        initial_qr = QuantumRegister(number_line)
+        qr = QuantumRegister(number_line)
+        cr = ClassicalRegister(number_line)
+        circuit = QuantumCircuit(initial_qr, qr, cr)
+
+        for i, ii in enumerate(initial_column):
+            if ii == 1:
+                circuit.x(initial_qr[i])
+
+        circuit.barrier()
+        first_block = True
+
+        for i in reversed(range(number_line)):
+            if first_block:
+                first_block = False
+                circuit.unitary(C2HGateNot(), [i - max_x, i + number_line], label='C2HGate')
+            elif i < min_x:
+                circuit.unitary(C3HGateAnd(), [i + number_line + 1, i + min_x, i + number_line], label='C3HGateAnd')
+            elif i > number_line - max_x - 1:
+                circuit.unitary(C3HGateAndNot(), [i + number_line + 1, i - max_x, i + number_line], label='C3HGateAndNot')
+            else:
+                circuit.unitary(C4HGate(), [i + number_line + 1, i + min_x, i - max_x, i + number_line], label='C4HGate')
+        circuit.measure(qr, cr)
+
+        qasm_sim = Aer.get_backend('qasm_simulator')
+        qobj = assemble(circuit, qasm_sim)
+
+        line = []
+        results = qasm_sim.run(qobj, shots = 1).result()
+        for i in results.get_counts():
+            for k in reversed(i):
+                line.append(int(k))
+            initial_column = line
+            arr.append(line)
+    return arr
