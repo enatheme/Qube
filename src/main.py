@@ -25,7 +25,7 @@ sky_image = prepare_sprite("sky.gif")
 
 floor_image = prepare_sprite("floor.gif")
 
-generated = quantum.generate_floor_v0(10)
+generated = quantum.generate_floor_v1(10)
 
 def to_pygame(y, height = HEIGHT, obj_height = QUBE_UNITY):
     return (height - y - obj_height)
