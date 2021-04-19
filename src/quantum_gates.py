@@ -1,8 +1,10 @@
 import math
 from qiskit.quantum_info.operators import Operator
 
-def C2HGate():
-    h = 1/math.sqrt(2)
+default_h = 1/math.sqrt(2)
+
+def C2HGate(divisor = 1):
+    h = default_h / divisor
     return Operator([
         [1, 0, 0, 0],
         [0, h, 0, h],
@@ -10,8 +12,8 @@ def C2HGate():
         [0, h, 0, -h]
     ])
 
-def C2HGateNot():
-    h = 1/math.sqrt(2)
+def C2HGateNot(divisor = 1):
+    h = default_h / divisor
     return Operator([
         [h, 0, h, 0],
         [0, 0, 0, 1],
@@ -19,8 +21,8 @@ def C2HGateNot():
         [0, 1, 0, 0]
     ])
 
-def C3HGateAnd():
-    h = 1/math.sqrt(2)
+def C3HGateAnd(divisor = 1):
+    h = default_h / divisor
     return Operator([
         [1, 0, 0, 0, 0, 0, 0, 0],
         [0, 1, 0, 0, 0, 0, 0, 0],
@@ -32,8 +34,8 @@ def C3HGateAnd():
         [0, 0, 0, h, 0, 0, 0, -h],
     ])
 
-def C3HGateAndNot():
-    h = 1/math.sqrt(2)
+def C3HGateAndNot(divisor = 1):
+    h = default_h / divisor
     return Operator([
         [1, 0, 0, 0, 0, 0, 0, 0],
         [0, h, 0, 0, 0, h, 0, 0],
@@ -45,8 +47,8 @@ def C3HGateAndNot():
         [0, 0, 0, 1, 0, 0, 0, 0],
     ])
 
-def C4HGate():
-    h = 1/math.sqrt(2)
+def C4HGate(divisor = 1):
+    h = default_h / divisor
     return Operator([
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
