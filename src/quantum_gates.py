@@ -1,15 +1,11 @@
 import math
 from qiskit.quantum_info.operators import Operator
 
-default_h = 1/math.sqrt(2)
-
 def compute_first_operand(numerator, divisor):
-    #return math.cos(((divisor - 1) / divisor) * (math.pi / 2))
-    return math.cos(((divisor - numerator) / divisor) * (math.pi / 2))
+    return math.cos(((numerator) / divisor) * (math.pi / 2))
 
 def compute_second_operand(numerator, divisor):
-    return math.cos(((numerator) / divisor) * (math.pi / 2))
-    #return math.cos((1 / divisor) * (math.pi / 2))
+    return math.cos(((divisor - numerator) / divisor) * (math.pi / 2))
 
 def C2HGate(numerator = 1, divisor = 1):
     h1 = compute_first_operand(numerator, divisor)

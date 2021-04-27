@@ -71,7 +71,7 @@ for i, ii in enumerate(generated):
 
 move = 0
 columns_ready = 10
-generated = quantum.generate_floor_v2(10, generated[9])
+generated = quantum.generate_floor_v3(10, generated[9])
 
 display_new_column = False
 automatic_scrolling = False
@@ -104,7 +104,7 @@ while True:
             columns_ready -= 1
             if columns_ready <= 0:
                 columns_ready = 10
-                generated = quantum.generate_floor_v2(10, generated[9])
+                generated = quantum.generate_floor_v3(10, generated[9])
                 print("generating new columns")
 
     if move > 0:
