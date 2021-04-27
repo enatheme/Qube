@@ -137,13 +137,13 @@ def generate_floor_v3(number_line, initial_column, min_x = 2, max_x = 2):
         for i in reversed(range(number_line)):
             if first_block:
                 first_block = False
-                circuit.unitary(C2HGateNot(number_line), [i - max_x, i + number_line], label='C2HGate')
+                circuit.unitary(C2HGateNot(i, number_line), [i - max_x, i + number_line], label='C2HGate')
             elif i < min_x:
-                circuit.unitary(C3HGateAnd(number_line), [i + number_line + 1, i + min_x, i + number_line], label='C3HGateAnd')
+                circuit.unitary(C3HGateAnd(i, number_line), [i + number_line + 1, i + min_x, i + number_line], label='C3HGateAnd')
             elif i > number_line - max_x - 1:
-                circuit.unitary(C3HGateAndNot(number_line), [i + number_line + 1, i - max_x, i + number_line], label='C3HGateAndNot')
+                circuit.unitary(C3HGateAndNot(i, number_line), [i + number_line + 1, i - max_x, i + number_line], label='C3HGateAndNot')
             else:
-                circuit.unitary(C4HGate(number_line), [i + number_line + 1, i + min_x, i - max_x, i + number_line], label='C4HGate')
+                circuit.unitary(C4HGate(i, number_line), [i + number_line + 1, i + min_x, i - max_x, i + number_line], label='C4HGate')
         circuit.measure(qr, cr)
 
         qasm_sim = Aer.get_backend('qasm_simulator')
