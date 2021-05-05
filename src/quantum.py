@@ -157,10 +157,25 @@ def generate_floor_v3(number_line, initial_column, min_x = 2, max_x = 2):
         qobj = assemble(circuit, qasm_sim)
 
         line = []
-        results = qasm_sim.run(qobj, shots = 1).result()
-        for i in results.get_counts():
-            for k in reversed(i):
-                line.append(int(k))
-            initial_column = line
-            arr.append(line)
+        rerun = True
+        r = None
+        while rerun:
+            results = qasm_sim.run(qobj, shots = 24).result()
+            if print_debug:
+                print(results.get_counts())
+            try:
+                # very ugly way to handle the most frequent len > 1
+                r = results.get_counts().most_frequent()
+                rerun = False
+            except qiskit.exceptions.QiskitError:
+                r = None
+        for i in reversed(r):
+            line.append(int(i))
+        initial_column = line
+        if print_debug:
+            print(f"|> {line}")
+            for debug in debug_arr:
+                print(debug)
+        arr.append(line)
+        debug_arr = []
     return arr
