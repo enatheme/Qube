@@ -115,6 +115,7 @@ def generate_floor_v3(number_line, initial_column, min_x = 2, max_x = 2):
     now let's have an equal probability for possible states for all levels.
     """
     assert(number_line == len(initial_column))
+    print_debug = False
 
     arr = []
     arr.append(initial_column)
@@ -127,6 +128,8 @@ def generate_floor_v3(number_line, initial_column, min_x = 2, max_x = 2):
         cr = ClassicalRegister(number_line)
         circuit = QuantumCircuit(initial_qr, qr, cr)
 
+        debug_arr = []
+
         for i, ii in enumerate(initial_column):
             if ii == 1:
                 circuit.x(initial_qr[i])
@@ -138,12 +141,16 @@ def generate_floor_v3(number_line, initial_column, min_x = 2, max_x = 2):
             if first_block:
                 first_block = False
                 circuit.unitary(C2HGateNot(i, number_line), [i - max_x, i + number_line], label='C2HGate')
+                debug_arr.append(f"\tC2HGateNot( {i}, {number_line}) __ [{i - max_x}, {i + number_line}]")
             elif i < min_x:
                 circuit.unitary(C3HGateAnd(i, number_line), [i + number_line + 1, i + min_x, i + number_line], label='C3HGateAnd')
+                debug_arr.append(f"\tC3HGateAnd( {i}, {number_line}) __ [{i + number_line + 1}, {i + min_x}, {i + number_line}]")
             elif i > number_line - max_x - 1:
                 circuit.unitary(C3HGateAndNot(i, number_line), [i + number_line + 1, i - max_x, i + number_line], label='C3HGateAndNot')
+                debug_arr.append(f"\tC3HGateAndNot( {i}, {number_line}) __ [{i + number_line + 1}, {i - max_x}, {i + number_line}]")
             else:
                 circuit.unitary(C4HGate(i, number_line), [i + number_line + 1, i + min_x, i - max_x, i + number_line], label='C4HGate')
+                debug_arr.append(f"\tC4HGate( {i}, {number_line}) __ [{i + number_line + 1}, {i + min_x}, {i - max_x}, {i + number_line}]")
         circuit.measure(qr, cr)
 
         qasm_sim = Aer.get_backend('qasm_simulator')
